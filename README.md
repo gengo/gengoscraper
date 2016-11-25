@@ -24,7 +24,7 @@ java -jar ./gengoscraper-1.0.0.jar --spring.config.location=file:./config.proper
 ## If you prefer to compile
 - Ensure that you have Java 8 installed.
 - Download sources under **src** folder.
-- Compile them with Maven: **mvn package**
+- Compile them with Maven: **mvc package**
 - The compiled binaries will be generated into **target** folder.
 - Create a **config.properties** like the one you can find under **run** folder and configure it.
 - Run the application as stated above.
