@@ -29,3 +29,5 @@ target
 # IntelliJ
 *.iml
 .idea
+
+gengo.log
