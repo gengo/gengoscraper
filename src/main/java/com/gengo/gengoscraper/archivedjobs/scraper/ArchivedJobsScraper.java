@@ -79,8 +79,8 @@ public class ArchivedJobsScraper {
 		HtmlPage page = getCompletedJobsPage(webClient);
 		int numPages=0;
 		do {
-			result.addAll(retrieveCompletedJobs(webClient, page));
-			page = getNextPage(webClient, page);
+			result.addAll(retrieveCompletedJobs(page));
+			page = getNextPage(page);
 		} while (++numPages < maxPages && page != null);
 		
 		WebClientUtil.closeWebClient(webClient);
@@ -136,20 +136,19 @@ public class ArchivedJobsScraper {
 	/**
 	 * Retrieves the next page of completed (archived) jobs.
 	 * 
-	 * @param webClient
-	 *            Web client.
 	 * @param page
 	 *            Current page of completed (archived) jobs.
-	 * @return Next page of completed (archived) jobs.
+	 * @return Next page of completed (archived) jobs, null if there isn't a next page.
 	 * @throws FailingHttpStatusCodeException
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	private HtmlPage getNextPage(WebClient webClient, HtmlPage page)
+	private HtmlPage getNextPage(HtmlPage page)
 			throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		HtmlPage nextPage = null;
 		HtmlAnchor nextPageLink = page.getFirstByXPath("//span[contains(@class, 'pagination_next')]/a");
 		if (nextPageLink != null) {
+			WebClient webClient = page.getWebClient();
 			nextPage = webClient.getPage(nextPageLink.getHrefAttribute());
 			webClient.waitForBackgroundJavaScript(10000);
 		}
@@ -159,14 +158,12 @@ public class ArchivedJobsScraper {
 	/**
 	 * Creates a list of archived jobs from the info in a page.
 	 * 
-	 * @param webClient
-	 *            Web client.
 	 * @param page
 	 *            Page with info about archived jobs.
 	 * @return List of archived jobs.
 	 * @throws ParseException
 	 */
-	private List<ArchivedJob> retrieveCompletedJobs(WebClient webClient, HtmlPage page) throws ParseException {
+	private List<ArchivedJob> retrieveCompletedJobs(HtmlPage page) throws ParseException {
 		List<ArchivedJob> archivedJobs = new ArrayList<ArchivedJob>();
 
 		List<HtmlListItem> listItems = (List<HtmlListItem>) page

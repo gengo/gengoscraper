@@ -35,6 +35,8 @@ public class ArchivedJob {
 	private BigDecimal totalPrice;
 	private Date date;
 	
+	// This toString() is prepared to show the object as a comma-separated String.
+	// This way it would be easier to use it with Java 8 streams (see TextUtil.generateCSV)
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SIMPLE_STYLE);
 	}
